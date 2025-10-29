@@ -1,1 +1,121 @@
-<!DOCTYPE html> <html lang="en"> <head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0"> <title>Video Quiz</title> <style>   body { font-family: Arial, sans-serif; margin: 20px; }   #quiz-container { display: flex; flex-wrap: wrap; justify-content: center; align-items: flex-start; gap: 20px; }   .video-container { position: relative; width: 45%; min-width: 300px; padding-bottom: 56.25%; }   .video-container iframe { position: absolute; top:0; left:0; width:100%; height:100%; border:none; }   .question-container { width: 45%; min-width: 250px; display: flex; flex-direction: column; justify-content: flex-start; }   .question { font-size: 18px; margin-bottom: 10px; }   .options button { display: block; margin: 5px 0; padding: 10px 20px; font-size: 16px; cursor: pointer; width: 100%; }   .correct { background-color: #4CAF50; color: white; }   .incorrect { background-color: #f44336; color: white; }   #nextBtn { margin-top: 20px; padding: 10px 20px; font-size: 16px; cursor: pointer; display: none; }   #result-container { text-align: center; } </style> </head> <body>  <h1>Video Quiz</h1>  <div id="quiz-container">   <div id="video-container" class="video-container"></div>   <div class="question-container">     <div class="question" id="question"></div>     <div class="options" id="options"></div>     <button id="nextBtn">Next</button>   </div> </div>  <div id="result-container" style="display:none;">   <h2>Your Results</h2>   <p id="score"></p>   <p>Thank you for participating!</p> </div>  <script> // Quiz data with corrected answers const quizData = [   {     video: "https://streamable.com/e/mmjjsb?",     question: "What is the boy doing wrong?",     options: ["Talking in class", "Eating in class", "Drawing on the desk"],     correct: 2   },   {     video: "https://streamable.com/e/yfrz3e?",     question: "What is the boy doing wrong?",     options: ["Ignoring the teacher", "Eating in class", "Throwing things"],     correct: 1   } ];  let currentQuestion = 0; let score = 0;  const videoContainer = document.getElementById('video-container'); const questionEl = document.getElementById('question'); const optionsEl = document.getElementById('options'); const nextBtn = document.getElementById('nextBtn'); const quizContainer = document.getElementById('quiz-container'); const resultContainer = document.getElementById('result-container'); const scoreEl = document.getElementById('score');  function loadQuestion() {   const q = quizData[currentQuestion];      // Embed Streamable iframe   videoContainer.innerHTML = `     <iframe allow="fullscreen" allowfullscreen src="${q.video}" style="border:none; width:100%; height:100%; position:absolute; left:0; top:0; overflow:hidden;"></iframe>   `;      questionEl.textContent = q.question;   optionsEl.innerHTML = '';   nextBtn.style.display = 'none';      q.options.forEach((opt, index) => {     const btn = document.createElement('button');     btn.textContent = opt;     btn.onclick = () => selectAnswer(index);     optionsEl.appendChild(btn);   }); }  function selectAnswer(index) {   const q = quizData[currentQuestion];      Array.from(optionsEl.children).forEach((btn, i) => {     btn.disabled = true;     if(i === q.correct) btn.classList.add('correct');     else if(i === index && i !== q.correct) btn.classList.add('incorrect');   });      if(index === q.correct) score++;   nextBtn.style.display = 'inline-block'; }  nextBtn.addEventListener('click', () => {   currentQuestion++;   if(currentQuestion < quizData.length) {     loadQuestion();   } else {     showResults();   } });  function showResults() {   quizContainer.style.display = 'none';   resultContainer.style.display = 'block';   scoreEl.textContent = `You got ${score} out of ${quizData.length} correct.`; }  // Start quiz loadQuestion(); </script>  </body> </html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Video Quiz</title>
+<style>
+  body { font-family: Arial, sans-serif; margin: 20px; }
+  #quiz-container { display: flex; flex-wrap: wrap; justify-content: center; align-items: flex-start; gap: 20px; }
+  .video-container { position: relative; width: 45%; min-width: 300px; padding-bottom: 56.25%; }
+  .video-container iframe { position: absolute; top:0; left:0; width:100%; height:100%; border:none; }
+  .question-container { width: 45%; min-width: 250px; display: flex; flex-direction: column; justify-content: flex-start; }
+  .question { font-size: 18px; margin-bottom: 10px; }
+  .options button { display: block; margin: 5px 0; padding: 10px 20px; font-size: 16px; cursor: pointer; width: 100%; }
+  .correct { background-color: #4CAF50; color: white; }
+  .incorrect { background-color: #f44336; color: white; }
+  #nextBtn { margin-top: 20px; padding: 10px 20px; font-size: 16px; cursor: pointer; display: none; }
+  #result-container { text-align: center; }
+</style>
+</head>
+<body>
+
+<h1>Video Quiz</h1>
+
+<div id="quiz-container">
+  <div id="video-container" class="video-container"></div>
+  <div class="question-container">
+    <div class="question" id="question"></div>
+    <div class="options" id="options"></div>
+    <button id="nextBtn">Next</button>
+  </div>
+</div>
+
+<div id="result-container" style="display:none;">
+  <h2>Your Results</h2>
+  <p id="score"></p>
+  <p>Thank you for participating!</p>
+</div>
+
+<script>
+// Quiz data with corrected answers
+const quizData = [
+  {
+    video: "https://streamable.com/e/mmjjsb?",
+    question: "What is the boy doing wrong?",
+    options: ["Talking in class", "Eating in class", "Drawing on the desk"],
+    correct: 2
+  },
+  {
+    video: "https://streamable.com/e/yfrz3e?",
+    question: "What is the boy doing wrong?",
+    options: ["Ignoring the teacher", "Eating in class", "Throwing things"],
+    correct: 1
+  }
+];
+
+let currentQuestion = 0;
+let score = 0;
+
+const videoContainer = document.getElementById('video-container');
+const questionEl = document.getElementById('question');
+const optionsEl = document.getElementById('options');
+const nextBtn = document.getElementById('nextBtn');
+const quizContainer = document.getElementById('quiz-container');
+const resultContainer = document.getElementById('result-container');
+const scoreEl = document.getElementById('score');
+
+function loadQuestion() {
+  const q = quizData[currentQuestion];
+  
+  // Embed Streamable iframe
+  videoContainer.innerHTML = `
+    <iframe allow="fullscreen" allowfullscreen src="${q.video}" style="border:none; width:100%; height:100%; position:absolute; left:0; top:0; overflow:hidden;"></iframe>
+  `;
+  
+  questionEl.textContent = q.question;
+  optionsEl.innerHTML = '';
+  nextBtn.style.display = 'none';
+  
+  q.options.forEach((opt, index) => {
+    const btn = document.createElement('button');
+    btn.textContent = opt;
+    btn.onclick = () => selectAnswer(index);
+    optionsEl.appendChild(btn);
+  });
+}
+
+function selectAnswer(index) {
+  const q = quizData[currentQuestion];
+  
+  Array.from(optionsEl.children).forEach((btn, i) => {
+    btn.disabled = true;
+    if(i === q.correct) btn.classList.add('correct');
+    else if(i === index && i !== q.correct) btn.classList.add('incorrect');
+  });
+  
+  if(index === q.correct) score++;
+  nextBtn.style.display = 'inline-block';
+}
+
+nextBtn.addEventListener('click', () => {
+  currentQuestion++;
+  if(currentQuestion < quizData.length) {
+    loadQuestion();
+  } else {
+    showResults();
+  }
+});
+
+function showResults() {
+  quizContainer.style.display = 'none';
+  resultContainer.style.display = 'block';
+  scoreEl.textContent = `You got ${score} out of ${quizData.length} correct.`;
+}
+
+// Start quiz
+loadQuestion();
+</script>
+
+</body>
+</html>
